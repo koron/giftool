@@ -1,3 +1,4 @@
+// Package info provides "info" sub command: to show GIF image information.
 package info
 
 import (

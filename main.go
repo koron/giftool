@@ -5,11 +5,13 @@ import (
 	"os"
 
 	"github.com/koron-go/subcmd"
+	"github.com/koron/giftool/internal/extract"
 	"github.com/koron/giftool/internal/info"
 )
 
 var rootSet = subcmd.DefineRootSet(
 	info.Info,
+	extract.Extract,
 )
 
 func main() {
