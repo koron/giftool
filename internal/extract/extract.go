@@ -4,21 +4,18 @@ package extract
 import (
 	"context"
 	"errors"
-	"flag"
 	"fmt"
 	"image"
 	"image/gif"
 	"image/png"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/koron-go/subcmd"
 )
 
 var Extract = subcmd.DefineCommand("extract", "extract each frames from GIF", func(ctx context.Context, args []string) error {
-	name := strings.Join(subcmd.Names(ctx), " ")
-	fs := flag.NewFlagSet(name, flag.ExitOnError)
+	fs := subcmd.FlagSet(ctx)
 	var outdir string
 	fs.StringVar(&outdir, "outdir", "", "output directory (default: base of input)")
 	fs.Parse(args)
