@@ -106,6 +106,7 @@ func dumpGIF(w io.Writer, g *gif.GIF) error {
 	}
 	fmt.Fprintf(w, "len(Delay)=%d\n", len(g.Delay))
 	fmt.Fprintf(w, "  Delay=%+v\n", g.Delay)
+	fmt.Fprintf(w, "LoopCount=%d\n", g.LoopCount)
 	fmt.Fprintf(w, "len(Disposal)=%d\n", len(g.Disposal))
 	fmt.Fprintf(w, "  Disposal=%+v\n", g.Disposal)
 	//pp.Fprintf(w, "Config=%s\n", g.Config)
