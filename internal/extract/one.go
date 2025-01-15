@@ -11,6 +11,7 @@ import (
 	"log"
 
 	"github.com/koron-go/subcmd"
+	"github.com/koron/giftool/internal/gifutil"
 )
 
 func ExtractOne(ctx context.Context, args []string) error {
@@ -33,7 +34,7 @@ type frameInfo struct {
 }
 
 func extractRepresentativeOne(output, input string) error {
-	g, err := loadGIF(input)
+	g, err := gifutil.LoadFile(input)
 	if err != nil {
 		return err
 	}

@@ -14,16 +14,6 @@ func appendFilename(name, suffix string) string {
 	return name[0:len(name)-len(ext)] + suffix
 }
 
-func loadGIF(name string) (*gif.GIF, error) {
-	f, err := os.Open(name)
-	if err != nil {
-		return nil, err
-	}
-	g, err := gif.DecodeAll(f)
-	f.Close()
-	return g, err
-}
-
 func prepareExpose(outdir, input string) (*gif.GIF, error) {
 	f, err := os.Open(input)
 	if err != nil {
