@@ -14,10 +14,15 @@ import (
 	_ "image/png"
 )
 
-var rootSet = subcmd.DefineRootSet(
+var developSet = subcmd.DefineSet("develop", "developper's tools",
 	info.Info,
 	extract.Extract,
 	analyse.Analyse,
+)
+
+var rootSet = subcmd.DefineRootSet(
+	developSet,
+	extract.ExtractSet,
 )
 
 func main() {

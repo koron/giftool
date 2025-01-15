@@ -23,7 +23,14 @@ const (
 	targetRepresentative
 )
 
-var Extract = subcmd.DefineCommand("extract", "extract each frames from GIF", func(ctx context.Context, args []string) error {
+var ExtractSet = subcmd.DefineSet("extract", "extract frames from animation GIF",
+	subcmd.DefineCommand("one", "extract a representative frame from GIF", ExtractOne),
+	//subcmd.DefineCommand("all", "extract all frames from GIF", ExtractAll),
+)
+
+var Extract = subcmd.DefineCommand("extract", "extract each frames from GIF", ExtractAll)
+
+func ExtractAll(ctx context.Context, args []string) error {
 	fs := subcmd.FlagSet(ctx)
 	var (
 		outdir string
@@ -64,7 +71,7 @@ var Extract = subcmd.DefineCommand("extract", "extract each frames from GIF", fu
 	default:
 		panic("invalid expose mode")
 	}
-})
+}
 
 func extractRepresentative(outdir, input string) error {
 	g, err := prepareExpose(outdir, input)

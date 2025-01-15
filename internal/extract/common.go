@@ -6,7 +6,23 @@ import (
 	"image/gif"
 	"math"
 	"os"
+	"path/filepath"
 )
+
+func appendFilename(name, suffix string) string {
+	ext := filepath.Ext(name)
+	return name[0:len(name)-len(ext)] + suffix
+}
+
+func loadGIF(name string) (*gif.GIF, error) {
+	f, err := os.Open(name)
+	if err != nil {
+		return nil, err
+	}
+	g, err := gif.DecodeAll(f)
+	f.Close()
+	return g, err
+}
 
 func prepareExpose(outdir, input string) (*gif.GIF, error) {
 	f, err := os.Open(input)
