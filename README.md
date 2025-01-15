@@ -14,6 +14,8 @@ Install and update:
 $ go install github.com/koron/giftool
 ```
 
+Or use pre-compiled binaries from [the latest release](https://github.com/koron/giftool/releases/latest).
+
 Extract a representative frame from animation GIF.
 
 ```console
