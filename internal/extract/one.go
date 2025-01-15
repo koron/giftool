@@ -45,7 +45,7 @@ func extractRepresentativeOne(output, input string) error {
 			highest = frameInfo{i: i, img: img, entropy: entropy}
 		}
 	}
-	log.Printf("highest: #%d %f", highest.i, highest.entropy)
+	log.Printf("extracted #%d from %s: entropy=%f", highest.i, input, highest.entropy)
 	if highest.img != nil && output != "" {
 		writeImage(output, highest.img)
 	}
