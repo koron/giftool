@@ -8,6 +8,7 @@ import (
 
 	"github.com/koron-go/subcmd"
 	"github.com/koron/giftool/internal/gifutil"
+	"github.com/koron/giftool/internal/imgutil"
 )
 
 func ExtractComposedFrames(ctx context.Context, args []string) error {
@@ -37,8 +38,8 @@ func extractComposedFrames(outdir, input string) error {
 	}
 	for i, img := range gifutil.IterateComposed(g) {
 		output := filepath.Join(outdir, fmt.Sprintf("%03d_composed.png", i))
-		err := writePNG(output, img)
-		if err !=nil {
+		err := imgutil.WritePNGFile(output, img)
+		if err != nil {
 			return err
 		}
 	}

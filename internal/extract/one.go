@@ -12,6 +12,7 @@ import (
 
 	"github.com/koron-go/subcmd"
 	"github.com/koron/giftool/internal/gifutil"
+	"github.com/koron/giftool/internal/imgutil"
 )
 
 func ExtractOne(ctx context.Context, args []string) error {
@@ -48,7 +49,7 @@ func extractRepresentativeOne(output, input string) error {
 	}
 	log.Printf("extracted #%d from %s: entropy=%f", highest.i, input, highest.entropy)
 	if highest.img != nil && output != "" {
-		writeImage(output, highest.img)
+		imgutil.WritePNGFile(output, highest.img)
 	}
 
 	return nil

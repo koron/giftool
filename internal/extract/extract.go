@@ -8,12 +8,12 @@ import (
 	"image"
 	"image/draw"
 	"image/gif"
-	"image/png"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/koron-go/subcmd"
+	"github.com/koron/giftool/internal/imgutil"
 )
 
 type exposeTarget int
@@ -94,7 +94,7 @@ func extractRepresentative(outdir, input string) error {
 
 	avg := averagingImages(images, g.Delay)
 	output := filepath.Join(outdir, "000avg.png")
-	err = writeImage(output, avg)
+	err = imgutil.WritePNGFile(output, avg)
 	if err != nil {
 		return err
 	}
@@ -104,7 +104,7 @@ func extractRepresentative(outdir, input string) error {
 		p := measureGray16(g16)
 		fmt.Printf("#%-3d %f\n", i, p)
 		output := filepath.Join(outdir, fmt.Sprintf("%03dd.png", i))
-		err := writeImage(output, g16)
+		err := imgutil.WritePNGFile(output, g16)
 		if err != nil {
 			return err
 		}
@@ -131,25 +131,12 @@ func extractFrames(outdir, input string) error {
 
 	for i, img := range g.Image {
 		output := filepath.Join(outdir, fmt.Sprintf("%03d.png", i))
-		err := writeImage(output, img)
+		err := imgutil.WritePNGFile(output, img)
 		if err != nil {
 			return err
 		}
 	}
 	return nil
-}
-
-func writeImage(output string, img image.Image) error {
-	return writePNG(output, img)
-}
-
-func writePNG(output string, img image.Image) error {
-	f, err := os.Create(output)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-	return png.Encode(f, img)
 }
 
 func writeGIF(output string, img image.Image) error {
