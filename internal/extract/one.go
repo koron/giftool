@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"image"
-	"image/color"
 	"image/draw"
 	"image/gif"
 	"iter"
@@ -53,32 +52,6 @@ func extractRepresentativeOne(output, input string) error {
 	}
 
 	return nil
-}
-
-func iterateComposedPaletted(g *gif.GIF) iter.Seq[*image.Paletted] {
-	rect := image.Rect(0, 0, g.Config.Width, g.Config.Height)
-	buf := image.NewPaletted(rect, g.Config.ColorModel.(color.Palette))
-	return func(yield func(*image.Paletted) bool) {
-		for i, src := range g.Image {
-			// composed accumulated image
-			op := draw.Over
-			switch g.Disposal[i] {
-			case 0:
-				op = draw.Src
-				buf.Palette = src.Palette
-			}
-			draw.Draw(buf, src.Rect, src, src.Rect.Min, op)
-			if !yield(buf) {
-				break
-			}
-		}
-	}
-}
-
-func duplicatePaletted(src *image.Paletted) *image.Paletted {
-	dup := image.NewPaletted(src.Rect, src.Palette)
-	draw.Draw(dup, src.Rect, src, src.Rect.Min, draw.Over)
-	return dup
 }
 
 func iterateComposedRGBA(g *gif.GIF) iter.Seq2[int, *image.RGBA] {

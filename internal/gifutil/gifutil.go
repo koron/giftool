@@ -1,3 +1,6 @@
+/*
+Package gifutil provides utility functions to manipulate GIF image.
+*/
 package gifutil
 
 import (

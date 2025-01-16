@@ -7,8 +7,6 @@ import (
 	"fmt"
 	"image"
 	"image/draw"
-	"image/gif"
-	"os"
 	"path/filepath"
 	"strings"
 
@@ -137,14 +135,4 @@ func extractFrames(outdir, input string) error {
 		}
 	}
 	return nil
-}
-
-func writeGIF(output string, img image.Image) error {
-	f, err := os.Create(output)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-	opts := gif.Options{}
-	return gif.Encode(f, img, &opts)
 }

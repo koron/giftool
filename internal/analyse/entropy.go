@@ -29,9 +29,9 @@ var Entropy = subcmd.DefineCommand("entropy", "calc entropy of image", func(ctx 
 			return fmt.Errorf("failed to load image %q: %w", name, err)
 		}
 		gray := toGrayImage(cimg)
-		hist := calcHist0(gray)
+		hist := calcHist(gray)
 		entropy := histToEntropy(hist)
-		chist := calcHist0(cimg)
+		chist := calcHist(cimg)
 		centropy := histToEntropy(chist)
 		log.Printf("#%d %s : entropy=%f color_entropy=%f", i, name, entropy, centropy)
 		if highest.entropy < entropy {
@@ -45,7 +45,7 @@ var Entropy = subcmd.DefineCommand("entropy", "calc entropy of image", func(ctx 
 	return nil
 })
 
-func calcHist0(img image.Image) map[color.RGBA]int {
+func calcHist(img image.Image) map[color.RGBA]int {
 	hist := map[color.RGBA]int{}
 	rect := img.Bounds()
 	for y := rect.Min.Y; y < rect.Max.Y; y++ {
@@ -58,18 +58,6 @@ func calcHist0(img image.Image) map[color.RGBA]int {
 				A: uint8(a / 0x0101),
 			}
 			hist[c]++
-		}
-	}
-	return hist
-}
-
-func calcHist(gray *image.Gray) map[uint8]int {
-	hist := map[uint8]int{}
-	r := gray.Bounds()
-	for y := r.Min.Y; y < r.Max.Y; y++ {
-		for x := r.Min.X; x < r.Max.X; x++ {
-			g := gray.GrayAt(x, y)
-			hist[g.Y]++
 		}
 	}
 	return hist
@@ -109,12 +97,4 @@ func toGrayImage(img image.Image) *image.Gray {
 		}
 	}
 	return gray
-}
-
-func loadGray(name string) (*image.Gray, error) {
-	img, err := loadImage(name)
-	if err != nil {
-		return nil, err
-	}
-	return toGrayImage(img), nil
 }
