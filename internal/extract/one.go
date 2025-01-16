@@ -41,7 +41,8 @@ func extractRepresentativeOne(output, input string) error {
 
 	highest := frameInfo{i: -1, entropy: -1}
 	for i, img := range iterateComposedRGBA(g) {
-		entropy := measureImageEntropy(img)
+		gray := imgutil.ToGray(img)
+		entropy := imgutil.MeasureEntropy(gray)
 		if entropy > highest.entropy {
 			highest = frameInfo{i: i, img: img, entropy: entropy}
 		}

@@ -1,4 +1,4 @@
-package extract
+package imgutil
 
 import (
 	"image"
@@ -24,12 +24,8 @@ func calcHist(img image.Image) map[color.RGBA]int {
 	return hist
 }
 
-func histToEntropy[T comparable](hist map[T]int) float64 {
+func histToEntropy[T comparable](hist map[T]int, sum int) float64 {
 	var entropy float64
-	var sum int
-	for _, n := range hist {
-		sum += n
-	}
 	for _, n := range hist {
 		p := float64(n) / float64(sum)
 		entropy += -p * math.Log2(p)
@@ -37,7 +33,7 @@ func histToEntropy[T comparable](hist map[T]int) float64 {
 	return entropy
 }
 
-func toGrayImage(img image.Image) *image.Gray {
+func ToGray(img image.Image) *image.Gray {
 	r := img.Bounds()
 	gray := image.NewGray(r)
 	for y := r.Min.Y; y < r.Max.Y; y++ {
@@ -50,6 +46,7 @@ func toGrayImage(img image.Image) *image.Gray {
 	return gray
 }
 
-func measureImageEntropy(img image.Image) float64 {
-	return histToEntropy(calcHist(toGrayImage(img)))
+func MeasureEntropy(img image.Image) float64 {
+	b := img.Bounds()
+	return histToEntropy(calcHist(img), b.Dx()*b.Dy())
 }
