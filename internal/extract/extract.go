@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"image"
 	"image/draw"
+	"image/gif"
 	"image/png"
 	"os"
 	"path/filepath"
@@ -25,6 +26,7 @@ const (
 
 var ExtractSet = subcmd.DefineSet("extract", "extract frames from animation GIF",
 	subcmd.DefineCommand("one", "extract a representative frame from GIF", ExtractOne),
+	subcmd.DefineCommand("cframes", "extract all composed frames from GIF", ExtractComposedFrames),
 	//subcmd.DefineCommand("all", "extract all frames from GIF", ExtractAll),
 )
 
@@ -111,18 +113,6 @@ func extractRepresentative(outdir, input string) error {
 	return nil
 }
 
-func extractComposedFrames(outdir, input string) error {
-	g, err := prepareExpose(outdir, input)
-	if err != nil {
-		return err
-	}
-
-	return forComposedFrames(g, func(i int, img *image.RGBA) error {
-		output := filepath.Join(outdir, fmt.Sprintf("%03dc.png", i))
-		return writeImage(output, img)
-	})
-}
-
 func composeImages(dst *image.RGBA, src *image.Paletted, disposal, bgIndex byte) error {
 	op := draw.Over
 	switch disposal {
@@ -150,10 +140,24 @@ func extractFrames(outdir, input string) error {
 }
 
 func writeImage(output string, img image.Image) error {
+	return writePNG(output, img)
+}
+
+func writePNG(output string, img image.Image) error {
 	f, err := os.Create(output)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
 	return png.Encode(f, img)
+}
+
+func writeGIF(output string, img image.Image) error {
+	f, err := os.Create(output)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	opts := gif.Options{}
+	return gif.Encode(f, img, &opts)
 }

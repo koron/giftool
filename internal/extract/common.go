@@ -7,6 +7,8 @@ import (
 	"math"
 	"os"
 	"path/filepath"
+
+	"github.com/koron/giftool/internal/gifutil"
 )
 
 func appendFilename(name, suffix string) string {
@@ -15,12 +17,7 @@ func appendFilename(name, suffix string) string {
 }
 
 func prepareExpose(outdir, input string) (*gif.GIF, error) {
-	f, err := os.Open(input)
-	if err != nil {
-		return nil, err
-	}
-	g, err := gif.DecodeAll(f)
-	f.Close()
+	g, err := gifutil.LoadFile(input)
 	if err != nil {
 		return nil, err
 	}
