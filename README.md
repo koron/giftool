@@ -17,6 +17,7 @@ $ go install github.com/koron/giftool
 Or use pre-compiled binaries from [the latest release](https://github.com/koron/giftool/releases/latest).
 
 Extract a representative (rep) frame from animation GIF.
+The representative frame is selected as the frame with the highest image entropy.
 
 ```console
 $ giftool extract rep path/to/animation.gif
