@@ -14,10 +14,14 @@ import (
 // ExtractRepFrame extracts a representative frame from an animation GIF.
 // "representative" means most "informational": highest entropy of image.
 func ExtractRepFrame(ctx context.Context, args []string) error {
-	var coloredentropy bool
+	var (
+		grayedEntropy bool
+		output         string
+	)
 
 	fs := subcmd.FlagSet(ctx)
-	fs.BoolVar(&coloredentropy, "coloredentropy", false, "use colored image to measure entropy (default: gray scaled)")
+	fs.BoolVar(&grayedEntropy, "grayedEntropy", false, "use gray scaled image to measure entropy (default: original image)")
+	fs.StringVar(&output, "output", "", `output PNG image filename (default: {orignal name} + "_rep.png")`)
 	fs.Parse(args)
 
 	if fs.NArg() != 1 {
@@ -25,11 +29,13 @@ func ExtractRepFrame(ctx context.Context, args []string) error {
 	}
 	input := fs.Arg(0)
 
-	output := appendFilename(input, "_rep.png")
+	if output == "" {
+		output = appendFilename(input, "_rep.png")
+	}
 
-	entropyFunc := normalEntropy
-	if coloredentropy {
-		entropyFunc = colorEntropy
+	entropyFunc := colorEntropy
+	if grayedEntropy {
+		entropyFunc = grayEntropy
 	}
 
 	return extractRepresentativeFrame(output, input, entropyFunc)
@@ -41,7 +47,7 @@ type frameInfo struct {
 	entropy float64
 }
 
-func normalEntropy(img image.Image) float64 {
+func grayEntropy(img image.Image) float64 {
 	return imgutil.MeasureEntropy(imgutil.ToGray(img))
 }
 
