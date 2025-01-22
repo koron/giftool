@@ -6,7 +6,6 @@ package gifutil
 import (
 	"image"
 	"image/color"
-	"image/draw"
 	"image/gif"
 	"iter"
 	"os"
@@ -23,9 +22,28 @@ func LoadFile(name string) (*gif.GIF, error) {
 }
 
 func duplicatePaletted(src *image.Paletted) *image.Paletted {
-	dup := image.NewPaletted(src.Rect, src.Palette)
-	draw.Draw(dup, src.Rect, src, src.Rect.Min, draw.Over)
-	return dup
+	pix := make([]uint8, len(src.Pix))
+	copy(pix, src.Pix)
+	palette := make(color.Palette, len(src.Palette))
+	copy(palette, src.Palette)
+	return &image.Paletted{
+		Pix:     pix,
+		Stride:  src.Stride,
+		Rect:    src.Rect,
+		Palette: palette,
+	}
+}
+
+func drawOver(dst, src *image.Paletted) {
+	for y := src.Rect.Min.Y; y < src.Rect.Max.Y; y++ {
+		for x := src.Rect.Min.X; x < src.Rect.Max.X; x++ {
+			index := src.ColorIndexAt(x, y)
+			if c := src.Palette[index].(color.RGBA); c.A == 0 {
+				continue
+			}
+			dst.SetColorIndex(x, y, index)
+		}
+	}
 }
 
 // IterateComposed iterates composed frames.
@@ -38,7 +56,7 @@ func IterateComposed(g *gif.GIF) iter.Seq2[int, *image.Paletted] {
 			// composed accumulated image
 			switch g.Disposal[i] {
 			case gif.DisposalNone:
-				draw.Over.Draw(last, src.Rect, src, src.Rect.Min)
+				drawOver(last, src)
 				curr = duplicatePaletted(last)
 			case gif.DisposalBackground:
 				curr = src

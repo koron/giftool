@@ -16,10 +16,10 @@ $ go install github.com/koron/giftool
 
 Or use pre-compiled binaries from [the latest release](https://github.com/koron/giftool/releases/latest).
 
-Extract a representative frame from animation GIF.
+Extract a representative (rep) frame from animation GIF.
 
 ```console
-$ giftool extract one path/to/animation.gif
+$ giftool extract rep path/to/animation.gif
 ```
 
-Extracted image is saved to path/to/animation\_one.png
+Extracted image is saved to path/to/animation\_rep.png

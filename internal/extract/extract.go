@@ -23,7 +23,9 @@ const (
 )
 
 var ExtractSet = subcmd.DefineSet("extract", "extract frames from animation GIF",
-	subcmd.DefineCommand("one", "extract a representative frame from GIF", ExtractOne),
+	subcmd.DefineCommand("one", "extract a representative frame from GIF", ExtractRepFrame),
+	subcmd.DefineCommand("representative", "extract a representative frame from GIF", ExtractRepFrame),
+	subcmd.DefineCommand("rep", "extract a representative frame from GIF", ExtractRepFrame),
 	subcmd.DefineCommand("cframes", "extract all composed frames from GIF", ExtractComposedFrames),
 	//subcmd.DefineCommand("all", "extract all frames from GIF", ExtractAll),
 )
