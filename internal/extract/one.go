@@ -16,7 +16,7 @@ import (
 func ExtractRepFrame(ctx context.Context, args []string) error {
 	var (
 		grayedEntropy bool
-		output         string
+		output        string
 	)
 
 	fs := subcmd.FlagSet(ctx)
