@@ -20,7 +20,7 @@ func ExtractRepFrame(ctx context.Context, args []string) error {
 	)
 
 	fs := subcmd.FlagSet(ctx)
-	fs.BoolVar(&grayedEntropy, "grayedEntropy", false, "use gray scaled image to measure entropy (default: original image)")
+	fs.BoolVar(&grayedEntropy, "grayedentropy", false, "use gray scaled image to measure entropy (default: original image)")
 	fs.StringVar(&output, "output", "", `output PNG image filename (default: {orignal name} + "_rep.png")`)
 	fs.Parse(args)
 
