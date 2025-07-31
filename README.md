@@ -11,7 +11,7 @@ Requirements: Go 1.23 or later
 Install and update:
 
 ```console
-$ go install github.com/koron/giftool
+$ go install github.com/koron/giftool@latest
 ```
 
 Or use pre-compiled binaries from [the latest release](https://github.com/koron/giftool/releases/latest).
